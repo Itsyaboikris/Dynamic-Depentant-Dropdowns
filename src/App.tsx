@@ -14,29 +14,44 @@ class DynamicDropdown extends Component {
     };
 
     componentDidMount() {
-        this.getOrganisations();
+        try{
+            this.getOrganisations();
+        }catch (e) {
+            alert("Error fetching data");
+        }
+
     };
 
     async getOrganisations() {
-        await axios.get("http://localhost:3000/organisation/selectAllOrganisations")
-            .then((response: AxiosResponse) => {
-                this.setState({
-                    organisations: response.data.success.data
+        try{
+            await axios.get("http://localhost:3000/organisation/selectAllOrganisations")
+                .then((response: AxiosResponse) => {
+                    this.setState({
+                        organisations: response.data.success.data
+                    });
                 });
-            });
+        }catch (e) {
+            alert("Error fetching data");
+        }
+
     };
 
     async getBranches(orgID: Number) {
-        await axios.post("http://localhost:3000/branch/selectAllBranchByOrgID",
-            {
-                "id": orgID
-            })
-            .then((response: AxiosResponse) => {
-                this.setState({
-                    branches: response.data.success.data
-                });
+        try{
+            await axios.post("http://localhost:3000/branch/selectAllBranchByOrgID",
+                {
+                    "id": orgID
+                })
+                .then((response: AxiosResponse) => {
+                    this.setState({
+                        branches: response.data.success.data
+                    });
 
-            })
+                })
+        }catch (e) {
+            alert("Error fetching data");
+        }
+
     };
 
     handleDropdownOne = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -77,7 +92,7 @@ class DynamicDropdown extends Component {
                                 <option>--Select Branches--</option>
                                 {
                                     this.state.branches.map(
-                                        (branch: any) =>
+                                        (branch:any) =>
                                             <option key={branch.branch_id} value={branch.branch_id}>
                                                 {branch.branch_name}
                                             </option>
